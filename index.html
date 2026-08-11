@@ -1,64 +1,432 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Zoo Exhibit Maps</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoo Exhibit Maps</title>
 
-        <style>
-           /* Style the main header container */
-            header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 20px 50px;
-                background-color: #333;
-                color: white;
-            }
 
-            /* Style the logo text */
-            .logo {
-                font-size: 24px;
-                font-weight: bold;
-            }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-            /* Make the list items sit side-by-side */
-            nav ul {
-                display: flex;
-                list-style: none;
-                gap: 20px;
-            }
 
-            /* Style the links and remove underlines */
-            nav a {
-                color: white;
-                text-decoration: none;
-                font-size: 18px;
-            }
+    <style>
+       
+        :root {
+            --ink:    #14261d;  
+            --moss:   #3e5b45;  
+            --paper:  #edefe9;  
+            --card:   #ffffff;
+            --brass:  #b07d2e;  
+            --stone:  #8a9086;
+            --radius: 4px;
+        }
 
-            /* Change link color when hovering with a mouse */
-            nav a:hover {
-                color: #ffcc00;
-            }
 
-        </style>
-    </head>
+        * { box-sizing: border-box; }
 
-    <body>
-        <header>
-        <!-- Your website logo or brand name -->
+
+        body {
+            margin: 0;
+            background-color: var(--paper);
+            color: var(--ink);
+            font-family: "Inter", system-ui, sans-serif;
+            line-height: 1.55;
+        }
+
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background-color: var(--ink);
+            color: var(--paper);
+        }
+
+
+        .logo {
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        nav a {
+            color: var(--paper);
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+
+        nav a:hover,
+        nav a:focus-visible {
+            color: var(--brass);
+        }
+
+
+        /* ---- Page intro ---- */
+        .intro {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 64px 50px 40px;
+        }
+
+
+        .eyebrow {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--brass);
+            margin: 0 0 12px;
+        }
+
+
+        .intro h1 {
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-size: clamp(38px, 6vw, 68px);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            margin: 0 0 16px;
+            max-width: 14ch;
+        }
+
+
+        .intro p {
+            max-width: 52ch;
+            margin: 0;
+            color: var(--moss);
+            font-size: 18px;
+        }
+
+
+        /* ---- The card grid ---- */
+        .grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 50px 80px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 28px;
+        }
+
+
+        .card {
+            background-color: var(--card);
+            border: 1px solid rgba(20, 38, 29, 0.1);
+            border-radius: var(--radius);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(20, 38, 29, 0.14);
+        }
+
+
+        /* Fixed-ratio image box so cards line up even with mixed photo sizes */
+        .card-media {
+            position: relative;
+            aspect-ratio: 3 / 2;
+            background-color: var(--ink);
+            overflow: hidden;
+        }
+
+
+        .card-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+
+        /* Shown only when the photo fails to load */
+        .card-media .fallback {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-size: 13px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--stone);
+            background-color: var(--ink);
+        }
+
+
+        .card-media.is-broken .fallback { display: flex; }
+        .card-media.is-broken img { display: none; }
+
+
+        .card-body {
+            padding: 20px 22px 24px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+
+        .card-body h2 {
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-size: 21px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+            margin: 0 0 10px;
+        }
+
+
+        .card-body p {
+            margin: 0 0 18px;
+            color: var(--moss);
+            font-size: 15px;
+            flex: 1;
+        }
+
+
+        .card-link {
+            align-self: flex-start;
+            color: var(--ink);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 2px solid var(--brass);
+            padding-bottom: 2px;
+        }
+
+
+        .card-link:hover,
+        .card-link:focus-visible {
+            color: var(--brass);
+        }
+
+
+        footer {
+            border-top: 1px solid rgba(20, 38, 29, 0.12);
+            padding: 28px 50px;
+            font-size: 14px;
+            color: var(--stone);
+            text-align: center;
+        }
+
+
+        /* ---- Small screens ---- */
+        @media (max-width: 640px) {
+            header { flex-direction: column; gap: 16px; padding: 20px 24px; }
+            .intro { padding: 40px 24px 28px; }
+            .grid  { padding: 0 24px 56px; gap: 20px; }
+            footer { padding: 24px; }
+        }
+
+
+        @media (prefers-reduced-motion: reduce) {
+            .card { transition: none; }
+            .card:hover { transform: none; }
+        }
+    </style>
+</head>
+
+
+<body>
+    <header>
         <div class="logo">Animal Map Zoo</div>
-        
-        <!-- Nate this is the header, the first context of the website -->
-        <nav>
-            <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Contact</a></li>
-            </ul>
-        </nav>
-        </header>
+    </header>
 
-    </body>
+
+    <main>
+        <section class="intro">
+            <p class="eyebrow">Smithsonian's National Zoo</p>
+            <h1>Every exhibit, one page.</h1>
+            <p>Thirteen habitats across Rock Creek Park, from the gorillas in Primates
+               to the meerkats in the Small Mammal House.</p>
+        </section>
+
+
+        <!-- Cards get built into here by the script below -->
+        <section class="grid" id="exhibit-grid"></section>
+    </main>
+
+
+    <footer>Exhibit data and photos from the Smithsonian's National Zoo.</footer>
+
+
+    <script>
+        const exhibits = [
+            {
+                label: "Claws & Paws Pathway",
+                lat: 38.928294, long: -77.047581,
+                image: "https://dev-national-zoo.pantheonsite.io/sites/default/files/2025-06/20220516-045SB%20%281%29.jpeg",
+                description: "Meet binturongs, bobcats, Pallas cats and porcupines along Claws & Paws Pathway.",
+                link: "https://dev-national-zoo.pantheonsite.io/animals/exhibits/claws-paws-pathway"
+            },
+            {
+                label: "Our Voices in Saving Species",
+                lat: 38.930556, long: -77.05431,
+                image: "https://dev-national-zoo.pantheonsite.io/sites/default/files/2025-06/ourvoicesinsavingspeciesexhibit%20%281%29.jpg",
+                description: "This gallery of photos and stories highlights Smithsonian efforts to save wildlife species from extinction and to train future generations of conservation scientists.",
+                link: "https://dev-national-zoo.pantheonsite.io/animals/exhibits/our-voices-saving-species"
+            },
+            {
+                label: "Bird House",
+                lat: 38.929856, long: -77.051893,
+                image: "https://dev-national-zoo.pantheonsite.io/sites/default/files/2025-06/20250226-817A2363-35RP%20%281%29.jpg",
+                description: "The Bird House exhibit invites Zoo visitors to soar into the fascinating world of shorebirds, waterfowl and songbirds from the Americas.",
+                link: "https://dev-national-zoo.pantheonsite.io/animals/exhibits/bird-house"
+            },
+            {
+                label: "Asia Trail",
+                lat: 38.931153, long: -77.05279,
+                image: "https://dev-national-zoo.pantheonsite.io/sites/default/files/animals/asiansmallclawedotter-001.jpg",
+                description: "Asia Trail is home to the some of the largest continent's most unique species.",
+                link: "https://dev-national-zoo.pantheonsite.io/animals/exhibits/asia-trail"
+            },
+            {
+                label: "American Trail",
+                lat: 38.930529, long: -77.04931,
+                image: "https://dev-national-zoo.pantheonsite.io/sites/default/files/animals/sealion-004.jpg",
+                description: "American Trail is the place where Zoo visitors can get their feet wet.",
+                link: "https://dev-national-zoo.pantheonsite.io/animals/exhibits/american-trail"
+            },
+            {
+                label: "Amazonia",
+                lat: 38.927749, long: -77.0476,
+                image: "https://dev-national-zoo.pantheonsite.io/sites/default/files/animals/freshwaterstingray-002.jpg",
+                description: "Get up close to the animals of the Amazon.",
+                link: "https://dev-national-zoo.pantheonsite.io/animals/exhibits/amazonia"
+            },
+            {
+                label: "Small Mammal House",
+                lat: 38.930417, long: -77.048944,
+                image: "https://dev-national-zoo.pantheonsite.io/sites/default/files/2025-06/20180622-5482RP-meerkat.jpg",
+                description: "Scurry into the Small Mammal House.",
+                link: "https://dev-national-zoo.pantheonsite.io/animals/exhibits/small-mammal-house"
+            },
+            {
+                label: "Elephant Trails",
+                lat: 38.931185, long: -77.0505,
+                image: "https://dev-national-zoo.pantheonsite.io/sites/default/files/animals/elephant-003.jpg",
+                description: "Elephant Trails is more than an exhibit.",
+                link: "https://dev-national-zoo.pantheonsite.io/animals/exhibits/elephant-trails"
+            },
+            {
+                label: "Africa Trail",
+                lat: 38.930644, long: -77.053579,
+                image: "https://dev-national-zoo.pantheonsite.io/sites/default/files/animals/cheetah-003.jpg",
+                description: "Cheetahs, ostriches, zebras and addax.",
+                link: "https://dev-national-zoo.pantheonsite.io/animals/exhibits/cheetah-conservation-station"
+            },
+            {
+                label: "Reptile Discovery Center",
+                lat: 38.929747, long: -77.047517,
+                image: "https://dev-national-zoo.pantheonsite.io/sites/default/files/animals/aldabratortoise-002.jpg",
+                description: "Celebrates reptiles and amphibians.",
+                link: "https://dev-national-zoo.pantheonsite.io/animals/exhibits/reptile-discovery-center"
+            },
+            {
+                label: "Kids' Farm",
+                lat: 38.92714, long: -77.045971,
+                image: "https://dev-national-zoo.pantheonsite.io/sites/default/files/2025-06/20110826-073MM.jpg",
+                description: "Visitors can see cows, alpacas and more.",
+                link: "https://dev-national-zoo.pantheonsite.io/animals/exhibits/kids-farm"
+            },
+            {
+                label: "Great Cats",
+                lat: 38.928487, long: -77.046557,
+                image: "https://dev-national-zoo.pantheonsite.io/sites/default/files/animals/africanlion-005_0.jpg",
+                description: "African lions and Sumatran tigers.",
+                link: "https://dev-national-zoo.pantheonsite.io/animals/exhibits/great-cats"
+            },
+            {
+                label: "Primates",
+                lat: 38.929908, long: -77.04829,
+                image: "https://dev-national-zoo.pantheonsite.io/sites/default/files/animals/exhibit/lowlandgorilla-004.jpg",
+                description: "Home to over a dozen species of primates.",
+                link: "https://dev-national-zoo.pantheonsite.io/animals/exhibits/primates"
+            }
+        ];
+
+
+
+
+        const grid = document.getElementById("exhibit-grid");
+
+
+        function buildCard(exhibit) {
+            const card = document.createElement("article");
+            card.className = "card";
+
+
+            // --- image ---
+            const media = document.createElement("div");
+            media.className = "card-media";
+
+
+            const img = document.createElement("img");
+            img.src = exhibit.image;
+            img.alt = exhibit.label;
+            img.loading = "lazy";
+            // If the photo 404s or is blocked, swap in the placeholder
+            img.addEventListener("error", () => media.classList.add("is-broken"));
+
+
+            const fallback = document.createElement("div");
+            fallback.className = "fallback";
+            fallback.textContent = "Photo unavailable";
+
+
+            media.append(img, fallback);
+
+
+            // --- text ---
+            const body = document.createElement("div");
+            body.className = "card-body";
+
+
+            const heading = document.createElement("h2");
+            heading.textContent = exhibit.label;
+
+
+            const desc = document.createElement("p");
+            desc.textContent = exhibit.description;
+
+
+            const link = document.createElement("a");
+            link.className = "card-link";
+            link.href = exhibit.link;
+            link.target = "_blank";
+            link.rel = "noopener";
+            link.textContent = "Visit exhibit";
+
+
+            body.append(heading, desc, link);
+            card.append(media, body);
+            return card;
+        }
+
+
+        exhibits.forEach(exhibit => grid.append(buildCard(exhibit)));
+    </script>
+</body>
 </html>
+
+
