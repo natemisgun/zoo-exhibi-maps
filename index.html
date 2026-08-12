@@ -231,7 +231,7 @@
 
 
         /* ---- Small screens ---- */
-        @media (max-width: 640px) {
+        @media (max-width: 720px) {
             header { flex-direction: column; gap: 16px; padding: 20px 24px; }
             .intro { padding: 40px 24px 28px; }
             .grid  { padding: 0 24px 56px; gap: 20px; }
@@ -422,9 +422,9 @@
             card.append(media, body);
             return card;
         }
-
-
-        exhibits.forEach(exhibit => grid.append(buildCard(exhibit)));
+        exhibits.sort((a, b) => 
+        a.label.localeCompare(b.label)).forEach(exhibit => 
+    grid.append(buildCard(exhibit)));
     </script>
 </body>
 </html>
